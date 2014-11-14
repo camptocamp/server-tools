@@ -31,6 +31,8 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+from openerp import SUPERUSER_ID
+
 
 class Storage(object):
 
@@ -112,7 +114,7 @@ class FileSystemStorage(Storage):
         file_size = sys.getsizeof(value.decode('base64'))
         _logger.debug('Add binary to model: %s, field: %s'
                       % (self.model_name, self.field_name))
-        binary_uid = self._file_write(self.cr, self.uid, value)       
+        binary_uid = self._file_write(self.cr, SUPERUSER_ID, value)
         return {
             'binary_uid': binary_uid,
             'file_size': file_size,
@@ -121,7 +123,7 @@ class FileSystemStorage(Storage):
     def update(self, binary_uid, value):
         _logger.debug('Delete binary model: %s, field: %s, uid: %s'
                       % (self.model_name, self.field_name, binary_uid))
-        self._file_delete(self.cr, self.uid, binary_uid)
+        self._file_delete(self.cr, SUPERUSER_ID, binary_uid)
         if not value:
             return {}
         return self.add(value)
@@ -129,7 +131,7 @@ class FileSystemStorage(Storage):
     def get(self, binary_uid):
         if not binary_uid:
             return None
-        return self._file_read(self.cr, self.uid, binary_uid)
+        return self._file_read(self.cr, SUPERUSER_ID, binary_uid)
 
     def get_url(self, binary_uid):
         if not binary_uid:
@@ -206,7 +208,7 @@ class BinaryField(fields.function):
         result = {}
         storage_obj = obj.pool['storage.configuration']
         for record in obj.browse(cr, uid, ids, context=context):
-            storage = storage_obj.get_storage(cr, uid, field_name, record)
+            storage = storage_obj.get_storage(cr, SUPERUSER_ID, field_name, record)
             binary_uid = record['%s_uid' % field_name]
             if binary_uid:
                 result[record.id] = self._read_binary(
@@ -273,13 +275,14 @@ class ImageField(BinaryField):
                      context=None):
         if not context.get('bin_size_%s' % field_name)\
              and not context.get('bin_base64_%s' % field_name)\
+             and not context.get('bin_base64')\
              and storage.external_storage_server:
-            if context.get('bin_size'):
+            #if context.get('bin_size'):
                 # To avoid useless call by default for the image
                 # We never return the bin size but the url
                 # SO I remove the key in order to avoid the 
                 # automatic conversion in the orm
-                context.pop('bin_size')
+                #context.pop('bin_size')
             return storage.get_url(binary_uid)
         else:
             return super(ImageField, self)._read_binary(
@@ -305,7 +308,7 @@ class ImageField(BinaryField):
             record = obj.browse(cr, uid, record_id, context=ctx)
             original_image = record[field.resize_based_on]
             if original_image:
-                size = (field.height, field.width)
+                size = (field.width, field.height)
                 resized_image = image_resize_image(original_image, size)
             else:
                 resized_image = None
