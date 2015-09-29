@@ -94,7 +94,7 @@ class FileSystemStorage(Storage):
 
     def _file_delete(self, cr, uid, fname):
         obj = self.pool[self.model_name]
-        count = obj.search(cr, 1, [
+        count = obj.search(cr, SUPERUSER_ID, [
             ('%s_uid' % self.field_name, '=', fname),
             ], count=True)
         full_path = self._full_path(cr, uid, fname)
@@ -182,7 +182,7 @@ class BinaryField(fields.function):
             ids = [ids]
         storage_obj = obj.pool['storage.configuration']
         for record in obj.browse(cr, uid, ids, context=context):
-            storage = storage_obj.get_storage(cr, uid, field_name, record)
+            storage = storage_obj.get_storage(cr, SUPERUSER_ID, field_name, record)
             binary_uid = record['%s_uid' % field_name]
             if binary_uid:
                 res = storage.update(binary_uid, value)
