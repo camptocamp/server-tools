@@ -4,7 +4,7 @@
 # © 2015 Antiun Ingeniería S.L. - Jairo Llopis
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import _, api, fields, models, tools
+from odoo import _, api, fields, models, tools
 
 
 class Owner(models.AbstractModel):
@@ -90,9 +90,12 @@ class Owner(models.AbstractModel):
 
     @api.multi
     def unlink(self):
-        """Mimic `ondelete="cascade"` for multi images."""
+        """Mimic `ondelete="cascade"` for multi images.
+
+        Will be skipped if ``env.context['bypass_image_removal']`` == True
+        """
         images = self.mapped("image_ids")
         result = super(Owner, self).unlink()
-        if result:
+        if result and not self.env.context.get('bypass_image_removal'):
             images.unlink()
         return result

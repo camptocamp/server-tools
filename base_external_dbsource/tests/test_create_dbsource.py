@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from openerp.exceptions import Warning as UserError
-from openerp.tests import common
+from odoo.exceptions import Warning as UserError
+from odoo.tests import common
 import logging
 
 
@@ -54,5 +54,13 @@ class TestCreateDbsource(common.TransactionCase):
             dbsource.connector = "cx_Oracle"
             dbsource.connection_test()
         except ValueError as e:
+            logging.warning("Log = " + str(e))
+            self.assertTrue(u'Wrong value for' in str(e))
+
+        # Connection to firebird
+        try:
+            dbsource.connector = "fdb"
+            dbsource.connection_test()
+        except Exception as e:
             logging.warning("Log = " + str(e))
             self.assertTrue(u'Wrong value for' in str(e))
