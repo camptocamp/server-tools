@@ -2,7 +2,6 @@
 # Copyright 2016 Serpent Consulting Services Pvt. Ltd. (support@serpentcs.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.exceptions import UserError
 from odoo import api, fields, models, _
 
 
@@ -28,7 +27,8 @@ class MassObject(models.Model):
                                       readonly=True,
                                       help="Sidebar button to open "
                                            "the sidebar action.")
-    model_list = fields.Char('Model List')
+    model_ids = fields.Many2many('ir.model', 'mass_model_rel',
+                                 'mass_id', 'model_id', 'Model List')
 
     _sql_constraints = [
         ('name_uniq', 'unique (name)', _('Name must be unique!')),
@@ -37,17 +37,17 @@ class MassObject(models.Model):
     @api.onchange('model_id')
     def _onchange_model_id(self):
         self.field_ids = [(6, 0, [])]
-        model_list = []
+        model_ids = []
         if self.model_id:
             model_obj = self.env['ir.model']
-            model_list = [self.model_id.id]
+            model_ids = [self.model_id.id]
             active_model_obj = self.env[self.model_id.model]
             if active_model_obj._inherits:
                 keys = active_model_obj._inherits.keys()
-                inherits_model_list = model_obj.search([('model', 'in', keys)])
-                model_list.extend((inherits_model_list and
-                                   inherits_model_list.ids or []))
-        self.model_list = model_list
+                inherits_model_ids = model_obj.search([('model', 'in', keys)])
+                model_ids.extend((inherits_model_ids and
+                                  inherits_model_ids.ids or []))
+        self.model_ids = [(6, 0, model_ids)]
 
     @api.multi
     def create_action(self):
