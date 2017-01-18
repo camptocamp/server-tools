@@ -81,14 +81,10 @@ class MassObject(models.Model):
 
     @api.multi
     def unlink_action(self):
-        for mass in self:
-            try:
-                if mass.ref_ir_act_window_id:
-                    mass.ref_ir_act_window_id.unlink()
-                if mass.ref_ir_value_id:
-                    mass.ref_ir_value_id.unlink()
-            except:
-                raise UserError(_("Deletion of the action record failed."))
+        # We make sudo as any user with rights in this model should be able
+        # to delete the action, not only admin
+        self.mapped('ref_ir_act_window_id').sudo().unlink()
+        self.mapped('ref_ir_value_id').sudo().unlink()
         return True
 
     @api.multi
@@ -96,6 +92,7 @@ class MassObject(models.Model):
         self.unlink_action()
         return super(MassObject, self).unlink()
 
+    @api.multi
     @api.returns('self', lambda value: value.id)
     def copy(self, default=None):
         if default is None:
