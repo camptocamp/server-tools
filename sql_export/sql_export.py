@@ -19,14 +19,9 @@
 #
 ##############################################################################
 
-import StringIO
-import base64
-import datetime
 import re
 from openerp.osv.orm import Model
 from openerp.osv import fields, orm
-from openerp.tools.translate import _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class SqlExport(Model):
@@ -81,6 +76,14 @@ class SqlExport(Model):
             'sql_id',
             'user_id',
             'Allowed Users'),
+        'field_ids': fields.many2many(
+            'ir.model.fields',
+            'fields_sqlquery_rel',
+            'sql_id',
+            'field_id',
+            'Parameters',
+            domain=[('model', '=', 'sql.file.wizard')]),
+        'valid': fields.boolean(),
     }
 
     _defaults = {
@@ -97,22 +100,10 @@ class SqlExport(Model):
         if not context:
             context = {}
         for obj in self.browse(cr, uid, ids, context=context):
-            today = datetime.datetime.now()
-            today_tz = fields.datetime.context_timestamp(
-                cr, uid, today, context=context)
-            date = today_tz.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-            output = StringIO.StringIO()
-            query = "COPY (" + obj.query + ")  TO STDOUT WITH " + \
-                    obj.copy_options
-            cr.copy_expert(query, output)
-            output.getvalue()
-            new_output = base64.b64encode(output.getvalue())
-            output.close()
             wiz = self.pool.get('sql.file.wizard').create(
-                cr, uid,
-                {
-                    'file': new_output,
-                    'file_name': obj.name + '_' + date + '.csv'})
+                cr, uid, {
+                    'valid': obj.valid,
+                    'sql_export_id': obj.id}, context=context)
         return {
             'view_type': 'form',
             'view_mode': 'form',
@@ -129,16 +120,18 @@ class SqlExport(Model):
             vals['query'] = vals['query'].strip()
             if vals['query'][-1] == ';':
                 vals['query'] = vals['query'][:-1]
-            try:
-                cr.execute(vals['query'])
-            except:
-                cr.rollback()
-                raise orm.except_orm(_("Invalid Query"),
-                                     _("The Sql query is not valid."))
+#            try:
+#                cr.execute(vals['query'])
+#            except:
+#                cr.rollback()
+#                raise orm.except_orm(_("Invalid Query"),
+#                                     _("The Sql query is not valid."))
         return vals
 
     def write(self, cr, uid, ids, vals, context=None):
         vals = self.check_query_syntax(cr, uid, vals, context=context)
+        if 'query' in vals:
+            vals['valid'] = False
         return super(SqlExport, self).write(
             cr, uid, ids, vals, context=context)
 

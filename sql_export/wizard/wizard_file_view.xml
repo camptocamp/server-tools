@@ -6,9 +6,21 @@
             <field name="name">sql.file.wizard.view.form</field>
             <field name="model">sql.file.wizard</field>
             <field name="arch" type="xml">
-                <form string="Csv File">
-                        <field name="file" filename="file_name"/>
-                        <field name="file_name" invisible="1"/>
+                <form string="Csv File" version="7.0">
+                    <separator string="Warning untested export" attrs="{'invisible': [('valid', '=', True)]}"/>
+                    <separator string="variables_placeholder" colspan="4" invisible="1"/>
+                    <separator string="Export file" colspan="4"
+                        attrs="{'invisible': [('file', '=', False)]}"/>
+                    <field name="valid" invisible="1"/>
+                    <field name="file" filename="file_name"/>
+                    <field name="file_name" invisible="1"/>
+                    <footer>
+                        <button name="export_sql" string="Export" type="object"
+                            icon="gtk-apply" />
+                        or
+                        <button special="cancel" string="Cancel" type="object"
+                            icon="gtk-cancel" />
+                    </footer>
                 </form>
             </field>
         </record>
