@@ -6,7 +6,10 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-testing = tools.config.get('test_enable') or os.environ.get('ODOO_TEST_ENABLE')
+testing = tools.config.get('test_enable') \
+    or os.environ.get('ODOO_TEST_ENABLE') \
+    or os.environ.get('TESTS')
+
 if testing:
     class PurchaseTest(models.Model):
         _inherit = 'base.exception'
