@@ -73,10 +73,8 @@ class ResUsersAuthenticatorCreate(models.TransientModel):
                 continue
 
             totp = pyotp.TOTP(record.secret_key)
-            user_dname = urllib.quote(
-                record.user_id.display_name.encode('utf-8'), safe=' ')
             provisioning_uri = totp.provisioning_uri(
-                user_dname,
+                record.user_id.display_name.encode('utf-8'),
                 issuer_name=record.user_id.company_id.display_name,
             )
             provisioning_uri = urllib.quote(provisioning_uri)
