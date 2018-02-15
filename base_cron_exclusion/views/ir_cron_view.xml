@@ -1,13 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2017 Eficent Business and IT Consulting Services S.L.
-     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
-
+<?xml version="1.0"?>
 <odoo>
-
     <record id="ir_cron_view" model="ir.ui.view">
         <field name="name">ir.cron.form - base_cron_exclusion</field>
         <field name="model">ir.cron</field>
-        <field name="inherit_id" ref="base.ir_cron_view"/>
+        <field name="inherit_id" ref="base.ir_cron_view_form"/>
         <field name="arch" type="xml">
             <notebook position="inside">
                 <page name="exclusive_cron" groups="base.group_no_one"
@@ -17,5 +13,4 @@
             </notebook>
         </field>
     </record>
-
 </odoo>

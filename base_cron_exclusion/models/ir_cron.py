@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -59,5 +58,5 @@ class IrCron(models.Model):
             res = super(IrCron, cls)._process_job(job_cr, job, cron_cr)
         finally:
             locked_crons.close()
-            _logger.debug("released blocks for cron job %s" % job['name'])
+            _logger.debug("released blocks for cron job %s" % job['cron_name'])
         return res
