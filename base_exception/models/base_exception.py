@@ -7,6 +7,7 @@ from functools import wraps
 
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError, ValidationError
+from odoo.osv.expression import AND
 from odoo.tools.safe_eval import safe_eval
 
 
@@ -62,6 +63,16 @@ class ExceptionRule(models.Model):
 #  - uid: current user id
 #  - context: current context
 """)
+    warning_only = fields.Boolean(
+        string='Warning only',
+        default=False
+    )
+    warning_text = fields.Char(
+        string='Warning message',
+        translate=True,
+        help='This message can be added to the record that raised a warning.'
+             'For a sale order line it could be the product name sold.'
+    )
 
 
 class BaseException(models.AbstractModel):
@@ -136,14 +147,23 @@ class BaseException(models.AbstractModel):
         return True
 
     @api.multi
-    def detect_exceptions(self):
-        """returns the list of exception_ids for all the considered base.exceptions
+    def detect_exceptions(self, with_warning=False, only_warning=False):
+        """Returns the list of exception_ids for all the considered base.exceptions
+
+        :param bool with_warning: Returns the warnings as well if True
+        :param bool only_warning: Returns only warning exception if True and
+                                  with_warning is True as well
+
         """
         if not self:
             return []
         exception_obj = self.env['exception.rule']
-        all_exceptions = exception_obj.sudo().search(
-            [('rule_group', '=', self[0].rule_group)])
+        domain = [('rule_group', '=', self[0].rule_group)]
+        if not with_warning:
+            domain = AND([domain, [('warning_only', '=', False)]])
+        elif only_warning:
+            domain = AND([domain, [('warning_only', '=', True)]])
+        all_exceptions = exception_obj.sudo().search(domain)
         model_exceptions = all_exceptions.filtered(
             lambda ex: ex.model == self._name)
         sub_exceptions = all_exceptions.filtered(
