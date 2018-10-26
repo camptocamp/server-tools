@@ -11,6 +11,7 @@ class CleanupPurgeLine(models.AbstractModel):
     """ Abstract base class for the purge wizard lines """
     _name = 'cleanup.purge.line'
     _order = 'name'
+    _description = "Lines of Purge Wizard"
 
     name = fields.Char('Name', readonly=True)
     purged = fields.Boolean('Purged', readonly=True)
