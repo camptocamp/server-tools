@@ -7,8 +7,10 @@
             <field name="arch" type="xml">
                 <tree string="Exception Rule">
                     <field name="active"/>
+                    <field name="warning_only"/>
                     <field name="name"/>
                     <field name="description"/>
+                    <field name="warning_text"/>
                     <field name="model"/>
                     <field name="sequence"/>
                 </tree>
@@ -32,6 +34,10 @@
                         <field name="rule_group"/>
                         <field name="model"/>
                         <field name="code"/>
+                    </group>
+                    <group colspan="4" col="2" groups="base.group_system">
+                      <field name="warning_only"/>
+                      <field name="warning_text"/>
                     </group>
                 </form>
             </field>
