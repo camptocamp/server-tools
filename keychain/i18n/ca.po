@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * keychain
-# 
+#
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2017
 # Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017
@@ -10,17 +10,18 @@ msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-19 18:00+0000\n"
-"PO-Revision-Date: 2017-04-19 18:00+0000\n"
-"Last-Translator: Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017\n"
+"PO-Revision-Date: 2018-12-15 19:58+0000\n"
+"Last-Translator: mtbochaca <mtbochaca@gmail.com>\n"
 "Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ca\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.3\n"
 
 #. module: keychain
-#: code:addons/keychain/models/keychain.py:70
+#: code:addons/keychain/models/keychain.py:76
 #, python-format
 msgid ""
 "%s \n"
@@ -32,28 +33,23 @@ msgstr ""
 #. module: keychain
 #: model:ir.model.fields,help:keychain.field_keychain_account_environment
 msgid "'prod', 'dev', etc. or empty (for all)"
-msgstr "'prod', 'dev', etc. o buit (per tot) "
+msgstr "'prod', 'dev', etc. o buit (per tot)"
 
 #. module: keychain
 #: model:ir.actions.act_window,name:keychain.keychain_list_action
-#: model:ir.ui.view,arch_db:keychain.keychain_account_id
 msgid "Accounts"
 msgstr "Comptes"
 
 #. module: keychain
-#: model:ir.ui.view,arch_db:keychain.keychain_account_form
-msgid "Accounts form"
-msgstr "Formularis de comptes "
-
-#. module: keychain
 #: model:ir.model.fields,help:keychain.field_keychain_account_data
+#: model:ir.model.fields,help:keychain.field_keychain_backend_data
 msgid "Additionnal data as json"
-msgstr "Dades addicionals com json "
+msgstr "Dades addicionals com json"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_clear_password
 msgid "Clear password"
-msgstr "Esborra contrasenya "
+msgstr "Esborra contrasenya"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_create_uid
@@ -67,48 +63,57 @@ msgstr "Creat el"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_data
+#: model:ir.model.fields,field_description:keychain.field_keychain_backend_data
 msgid "Data"
-msgstr "Dades "
+msgstr "Dades"
 
 #. module: keychain
-#: code:addons/keychain/models/keychain.py:87
+#: code:addons/keychain/models/keychain.py:93
 #, python-format
 msgid "Data not valid"
-msgstr "Dades no vàlides "
+msgstr "Dades no vàlides"
 
 #. module: keychain
-#: code:addons/keychain/models/keychain.py:149
+#: code:addons/keychain/models/keychain.py:155
 #, python-format
 msgid "Data should be a valid JSON"
-msgstr "Les dades han de ser un JSON vàlid "
+msgstr "Les dades han de ser un JSON vàlid"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_display_name
+#: model:ir.model.fields,field_description:keychain.field_keychain_backend_display_name
 msgid "Display Name"
 msgstr "Veure el nom"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_environment
 msgid "Environment"
-msgstr "Entorn "
+msgstr "Entorn"
 
 #. module: keychain
 #: model:ir.model.fields,help:keychain.field_keychain_account_name
 msgid "Humain readable label"
-msgstr "Etiqueta humanament entenedora "
+msgstr "Etiqueta humanament entenedora"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_id
+#: model:ir.model.fields,field_description:keychain.field_keychain_backend_id
 msgid "ID"
 msgstr "ID"
 
 #. module: keychain
 #: model:ir.ui.menu,name:keychain.keychain_menu
 msgid "Keychain"
-msgstr "Clauer "
+msgstr "Clauer"
+
+#. module: keychain
+#: model:ir.model.fields,field_description:keychain.field_keychain_backend_keychain_account_id
+msgid "Keychain account id"
+msgstr "Id de compte Keychain"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account___last_update
+#: model:ir.model.fields,field_description:keychain.field_keychain_backend___last_update
 msgid "Last Modified on"
 msgstr "Darrera modificació el"
 
@@ -126,68 +131,78 @@ msgstr "Darrera Actualització el"
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_login
 #: model:ir.model.fields,help:keychain.field_keychain_account_login
 msgid "Login"
-msgstr "Entrada "
+msgstr "Entrada"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_name
+#: model:ir.model.fields,field_description:keychain.field_keychain_backend_name
 msgid "Name"
 msgstr "Nom"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_namespace
 msgid "Namespace"
-msgstr "Espai de noms "
+msgstr "Espai de noms"
 
 #. module: keychain
-#: code:addons/keychain/models/keychain.py:198
+#: code:addons/keychain/models/keychain.py:223
 #, python-format
 msgid ""
 "No 'keychain_key_%s' entries found in config file. Use a key similar to: %s"
 msgstr ""
 "No s'han trobat entrades 'keychain_key_%s' al fitxer de configuració. "
-"Utilitzeu una clau similar a: %s "
+"Utilitzeu una clau similar a: %s"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_password
+#: model:ir.model.fields,field_description:keychain.field_keychain_backend_password
 msgid "Password"
 msgstr "Contrasenya "
 
 #. module: keychain
-#: code:addons/keychain/models/keychain.py:162
+#: code:addons/keychain/models/keychain.py:168
 #, python-format
 msgid ""
-"Password has been encrypted with a different key. Unless you can recover the"
-" previous key, this password is unreadable."
+"Password has been encrypted with a different key. Unless you can recover the "
+"previous key, this password is unreadable."
 msgstr ""
 "La contrasenya està encriptada amb una clau diferent. Llevat que pugueu "
-"recuperar la clau anterior, la contrasenya és illegible. "
+"recuperar la clau anterior, la contrasenya és illegible."
 
 #. module: keychain
 #: model:ir.model.fields,help:keychain.field_keychain_account_password
 msgid "Password is derived from clear_password"
-msgstr "La contrasenya es deriva de clear_password "
+msgstr "La contrasenya es deriva de clear_password"
 
 #. module: keychain
 #: model:ir.model.fields,help:keychain.field_keychain_account_clear_password
 msgid "Password. Leave empty if no changes"
-msgstr "Contrasenya. Deixeu-la buida si no hi ha canvis "
+msgstr "Contrasenya. Deixeu-la buida si no hi ha canvis"
 
 #. module: keychain
 #: model:ir.model.fields,field_description:keychain.field_keychain_account_technical_name
 msgid "Technical name"
-msgstr "Nom tècnic "
+msgstr "Nom tècnic"
 
 #. module: keychain
 #: model:ir.model.fields,help:keychain.field_keychain_account_technical_name
 msgid "Technical name. Must be unique"
-msgstr "Nom tècnic. Ha de ser únic "
+msgstr "Nom tècnic. Ha de ser únic"
 
 #. module: keychain
 #: model:ir.model.fields,help:keychain.field_keychain_account_namespace
 msgid "Type of account"
-msgstr "Tipus de compte "
+msgstr "Tipus de compte"
 
 #. module: keychain
 #: model:ir.model,name:keychain.model_keychain_account
 msgid "keychain.account"
 msgstr "keychain.account"
+
+#. module: keychain
+#: model:ir.model,name:keychain.model_keychain_backend
+msgid "keychain.backend"
+msgstr "keychain.backend"
+
+#~ msgid "Accounts form"
+#~ msgstr "Formularis de comptes"

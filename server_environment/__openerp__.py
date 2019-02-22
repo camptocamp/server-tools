@@ -21,14 +21,15 @@
 
 {
     "name": "server configuration environment files",
-    "version": "9.0.1.2.0",
-    "depends": ["base", "server_environment_files"],
+    "version": "9.0.1.3.0",
+    "depends": ["base"],
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "summary": "move some configurations out of the database",
     "website": "http://odoo-community.org/",
     "license": "GPL-3 or any later version",
     "category": "Tools",
     "data": [
+        'security/res_groups.xml',
         'serv_config.xml',
     ],
     'installable': True,

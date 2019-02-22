@@ -163,7 +163,6 @@ Go to *settings / keychain*, create a record with the following
 Known issues / Roadmap
 ======================
 - Account inheritence is not supported out-of-the-box (like defining common settings for all environments)
-- Adapted to work with `server_environnement` modules
 - Key expiration or rotation should be done manually
 - Import passwords from data.xml
 
@@ -209,7 +208,7 @@ help us smashing it by providing a detailed and welcomed feedback.
 Credits
 =======
 
-`Akretion <https://akretion.com>`_
+* `Akretion <https://akretion.com>`_
 
 
 Contributors
@@ -222,7 +221,7 @@ Funders
 
 The development of this module has been financially supported by:
 
-* `Akretion <https://akretion.com>`_
+* Akretion
 
 Maintainer
 ----------

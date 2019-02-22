@@ -21,11 +21,12 @@ addon | version | summary
 [admin_technical_features](admin_technical_features/) | 9.0.0.1.0 | Checks the technical features box for admin user.
 [attachment_base_synchronize](attachment_base_synchronize/) | 9.0.1.0.0 | Attachment Base Synchronize
 [auditlog](auditlog/) | 9.0.1.0.0 | Audit Log
+[auth_brute_force](auth_brute_force/) | 9.0.1.1.0 | Track Authentication Attempts and Prevent Brute-force Attacks
 [auth_from_http_remote_user](auth_from_http_remote_user/) | 9.0.1.0.0 | Authenticate via HTTP Remote User
 [auth_session_timeout](auth_session_timeout/) | 9.0.1.0.0 | This module disable all inactive sessions since a given delay
 [auth_signup_verify_email](auth_signup_verify_email/) | 9.0.1.0.0 | Force uninvited users to use a good email for signup
 [auth_supplier](auth_supplier/) | 9.0.2.0.0 | Auth Supplier
-[auth_totp](auth_totp/) | 9.0.1.0.0 | Allows users to enable MFA and add optional trusted devices
+[auth_totp](auth_totp/) | 9.0.1.0.1 | Allows users to enable MFA and add optional trusted devices
 [auth_totp_password_security](auth_totp_password_security/) | 9.0.1.0.0 | auth_totp and password_security compatibility
 [auto_backup](auto_backup/) | 9.0.1.1.1 | Backups database
 [base_cron_exclusion](base_cron_exclusion/) | 9.0.1.0.0 | Allow you to select scheduled actions that should not run simultaneously.
@@ -43,6 +44,7 @@ addon | version | summary
 [base_search_fuzzy](base_search_fuzzy/) | 9.0.1.0.0 | Fuzzy search with the PostgreSQL trigram extension
 [base_suspend_security](base_suspend_security/) | 9.0.1.0.0 | Suspend security checks for a call
 [base_technical_features](base_technical_features/) | 9.0.1.0.0 | Access to technical features without activating debug mode
+[base_tier_validation](base_tier_validation/) | 9.0.1.0.2 | Implement a validation process based on tiers.
 [base_user_gravatar](base_user_gravatar/) | 9.0.1.0.0 | Synchronize Gravatar Image
 [base_user_role](base_user_role/) | 9.0.1.0.0 | User roles
 [base_view_inheritance_extension](base_view_inheritance_extension/) | 9.0.1.1.0 | Adds more operators for view inheritance
@@ -59,25 +61,26 @@ addon | version | summary
 [html_image_url_extractor](html_image_url_extractor/) | 9.0.1.0.0 | Extract images found in any HTML field
 [html_text](html_text/) | 9.0.1.0.0 | Generate excerpts from any HTML field
 [keychain](keychain/) | 9.0.1.0.0 | Store accounts and credentials
-[kpi](kpi/) | 9.0.1.0.0 | Key Performance Indicator
+[kpi](kpi/) | 9.0.1.1.0 | Key Performance Indicator
 [letsencrypt](letsencrypt/) | 9.0.1.0.0 | Request SSL certificates from letsencrypt.org
 [mail_cleanup](mail_cleanup/) | 9.0.1.0.0 | Mark as read or delete mails after a set time
 [mail_environment](mail_environment/) | 9.0.1.0.0 | Configure mail servers with server_environment_files
 [mail_log_messages_to_process](mail_log_messages_to_process/) | 9.0.1.0.0 | Log all messages received, before they start to be processed.
 [mass_editing](mass_editing/) | 9.0.1.0.0 | Mass Editing
 [menu_technical_info](menu_technical_info/) | 9.0.1.0.0 | Fast way to look up technical info about menu item.
-[module_auto_update](module_auto_update/) | 9.0.1.0.2 | Automatically update Odoo modules
+[module_auto_update](module_auto_update/) | 9.0.2.0.3 | Automatically update Odoo modules
 [module_prototyper](module_prototyper/) | 9.0.0.1.0 | Prototype your module.
 [oauth_provider](oauth_provider/) | 9.0.1.0.0 | Allows to use Odoo as an OAuth2 provider
 [oauth_provider_jwt](oauth_provider_jwt/) | 9.0.1.0.0 | Adds the JSON Web Token support for OAuth2 provider
-[password_security](password_security/) | 9.0.1.2.2 | Allow admin to set password security requirements.
+[password_security](password_security/) | 9.0.1.2.3 | Allow admin to set password security requirements.
 [res_config_settings_enterprise_remove](res_config_settings_enterprise_remove/) | 9.0.1.0.0 | Remove fields in all settings views marked as enterprise
 [scheduler_error_mailer](scheduler_error_mailer/) | 9.0.1.0.0 | Scheduler Error Mailer
-[server_environment](server_environment/) | 9.0.1.2.0 | move some configurations out of the database
+[sequence_check_digit](sequence_check_digit/) | 9.0.1.0.0 | Adds a check digit on sequences
+[server_environment](server_environment/) | 9.0.1.3.0 | move some configurations out of the database
 [server_environment_files_sample](server_environment_files_sample/) | 9.0.1.0.0 | sample config file for server_environment
 [server_environment_ir_config_parameter](server_environment_ir_config_parameter/) | 9.0.1.0.0 | Override System Parameters from server environment file
 [sql_export](sql_export/) | 9.0.1.0.0 | Export data in csv file with SQL requests
-[sql_request_abstract](sql_request_abstract/) | 9.0.1.0.0 | Abstract Model to manage SQL Requests
+[sql_request_abstract](sql_request_abstract/) | 9.0.1.0.1 | Abstract Model to manage SQL Requests
 [subscription_action](subscription_action/) | 9.0.1.0.0 | Run a server action on a newly created document
 [test_configuration_helper](test_configuration_helper/) | 9.0.1.0.0 | Configuration Helper - Tests
 [users_ldap_mail](users_ldap_mail/) | 9.0.1.0.0 | LDAP mapping for user name and e-mail
