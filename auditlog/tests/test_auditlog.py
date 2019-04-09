@@ -3,7 +3,7 @@
 from odoo.tests.common import TransactionCase
 
 
-class TestAuditlog(object):
+class AuditlogCommon(object):
 
     def test_LogCreation(self):
         """First test, caching some data."""
@@ -81,7 +81,7 @@ class TestAuditlog(object):
         ]).ensure_one())
 
 
-class TestAuditlogFull(TransactionCase, TestAuditlog):
+class TestAuditlogFull(TransactionCase, AuditlogCommon):
 
     def setUp(self):
         super(TestAuditlogFull, self).setUp()
@@ -101,7 +101,7 @@ class TestAuditlogFull(TransactionCase, TestAuditlog):
         super(TestAuditlogFull, self).tearDown()
 
 
-class TestAuditlogFast(TransactionCase, TestAuditlog):
+class TestAuditlogFast(TransactionCase, AuditlogCommon):
 
     def setUp(self):
         super(TestAuditlogFast, self).setUp()
