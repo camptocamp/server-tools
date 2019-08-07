@@ -124,12 +124,6 @@ class BaseExceptionMethod(models.AbstractModel):
             domain = AND([domain, [('warning_only', '=', True)]])
         rules = self.env['exception.rule'].sudo().search(domain)
         all_exception_ids = []
-        if rules:
-            # lock to avoid sequential access
-            self.env.cr.execute(
-                'SELECT id FROM exception_rule '
-                'WHERE id in %s FOR UPDATE', (tuple(rules.ids),)
-            )
         for rule in rules:
             records_with_exception = self._detect_exceptions(rule)
             reverse_field = self._reverse_field()
@@ -140,6 +134,10 @@ class BaseExceptionMethod(models.AbstractModel):
             to_remove_list = [(3, x.id, _) for x in to_remove]
             to_add_list = [(4, x.id, _) for x in to_add]
             if to_remove_list or to_add_list:
+                self.env.cr.execute(
+                    'SELECT id FROM exception_rule '
+                    'WHERE id = %s FOR UPDATE', (rule.id,)
+                )  # no deadlock because the order is enforced by sequence
                 rule.write({reverse_field: to_remove_list + to_add_list})
             if records_with_exception:
                 all_exception_ids.append(rule.id)
