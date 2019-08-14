@@ -121,6 +121,18 @@ class BaseExceptionMethod(models.AbstractModel):
             ).update(to_add)
             if records_with_exception:
                 all_exception_ids.append(rule.id)
+        # Cumulate all the records to attach to the rule
+        # before linking. We don't want to call "rule.write()"
+        # which would:
+        # * write on write_date so lock the expection.rule
+        # * trigger the recomputation of "main_exception_id" on
+        #   all the sale orders related to the rule, locking them all
+        #   and preventing concurrent writes
+        # Reversing the write by writing on SaleOrder instead of
+        # ExceptionRule fixes the 2 kinds of unexpected locks.
+        # It should not result in more queries than writing on ExceptionRule:
+        # the "to remove" part generates one DELETE per rule on the relation table
+        # and the "to add" part generates one INSERT (with unnest) per rule.
         for rule_id, records in rules_to_remove.iteritems():
             records.write({'exception_ids': [(3, rule_id,)]})
         for rule_id, records in rules_to_add.iteritems():
