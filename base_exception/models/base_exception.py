@@ -123,6 +123,8 @@ class BaseExceptionMethod(models.AbstractModel):
             domain = AND([domain, [('warning_only', '=', True)]])
         rules = self.env['exception.rule'].sudo().search(domain)
         all_exception_ids = []
+        rules_to_remove = {}
+        rules_to_add = {}
         for rule in rules:
             records_with_exception = self._detect_exceptions(rule)
             reverse_field = self._reverse_field()
@@ -130,11 +132,19 @@ class BaseExceptionMethod(models.AbstractModel):
             commons = main_records & rule[reverse_field]
             to_remove = commons - records_with_exception
             to_add = records_with_exception - commons
-            to_remove_list = [(3, x.id, _) for x in to_remove]
-            to_add_list = [(4, x.id, _) for x in to_add]
-            rule.write({reverse_field: to_remove_list + to_add_list})
+            # we expect to always work on the same model type
+            rules_to_remove.setdefault(
+                rule.id, main_records.browse()
+            ).update(to_remove)
+            rules_to_add.setdefault(
+                rule.id, main_records.browse()
+            ).update(to_add)
             if records_with_exception:
                 all_exception_ids.append(rule.id)
+        for rule_id, records in rules_to_remove.iteritems():
+            records.write({'exception_ids': [(3, rule_id,)]})
+        for rule_id, records in rules_to_add.iteritems():
+            records.write(({'exception_ids': [(4, rule_id,)]}))
         return all_exception_ids
 
     @api.model
