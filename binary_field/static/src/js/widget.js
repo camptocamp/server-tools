@@ -57,7 +57,7 @@ openerp.binary_field = function (instance) {
             ) {
                 return this.record[field].value;
             } else {
-                return this._super();
+                return this._super(model, field, id, cache, options);
             }
         },
     })
