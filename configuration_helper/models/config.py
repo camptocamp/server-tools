@@ -28,7 +28,7 @@ class AbstractConfigSettings(models.AbstractModel):
     @api.model
     def _setup_base(self):
         cls = type(self)
-        super(AbstractConfigSettings, self)._setup_base()
+        super()._setup_base()
 
         comp_fields = filter(
             lambda f: (f[0].startswith(self._prefix) and
