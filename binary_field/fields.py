@@ -271,23 +271,6 @@ class ImageField(BinaryField):
                         obj, cr, uid, ids, name, context=context)
         return True
 
-    def _read_binary(self, storage, record, field_name, binary_uid,
-                     context=None):
-        if not context.get('bin_size_%s' % field_name)\
-             and not context.get('bin_base64_%s' % field_name)\
-             and not context.get('bin_base64')\
-             and storage.external_storage_server:
-            #if context.get('bin_size'):
-                # To avoid useless call by default for the image
-                # We never return the bin size but the url
-                # SO I remove the key in order to avoid the 
-                # automatic conversion in the orm
-                #context.pop('bin_size')
-            return storage.get_url(binary_uid)
-        else:
-            return super(ImageField, self)._read_binary(
-                storage, record, field_name, binary_uid, context=context)
-
     def _refresh_cache(self, obj, cr, uid, ids, field_name, context=None):
         """Refresh the cache of the small image
         :params ids: list of object id to refresh
