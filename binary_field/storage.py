@@ -22,6 +22,7 @@
 
 from .fields import FileSystemStorage
 from openerp.osv import fields, orm
+from openerp.tools.translate import _
 
 
 class StorageConfiguration(orm.Model):
