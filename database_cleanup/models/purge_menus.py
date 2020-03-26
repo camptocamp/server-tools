@@ -14,7 +14,6 @@ class CleanupPurgeLineMenu(models.TransientModel):
     )
     menu_id = fields.Many2one("ir.ui.menu", "Menu entry")
 
-    @api.multi
     def purge(self):
         """Unlink menu entries upon manual confirmation."""
         if self:
@@ -50,7 +49,7 @@ class CleanupPurgeWizardMenu(models.TransientModel):
             if (menu.action.res_model and menu.action.res_model not in self.env) or (
                 menu.action.src_model and menu.action.src_model not in self.env
             ):
-                res.append((0, 0, {"name": menu.complete_name, "menu_id": menu.id,}))
+                res.append((0, 0, {"name": menu.complete_name, "menu_id": menu.id}))
         if not res:
             raise UserError(_("No dangling menu entries found"))
         return res
