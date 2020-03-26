@@ -14,7 +14,6 @@ class CreateIndexesLine(models.TransientModel):
     wizard_id = fields.Many2one("cleanup.create_indexes.wizard")
     field_id = fields.Many2one("ir.model.fields", required=True)
 
-    @api.multi
     def purge(self):
         tables = set()
         for field in self.mapped("field_id"):
@@ -43,7 +42,6 @@ class CreateIndexesWizard(models.TransientModel):
 
     purge_line_ids = fields.One2many("cleanup.create_indexes.line", "wizard_id",)
 
-    @api.multi
     def find(self):
         res = list()
         for field in self.env["ir.model.fields"].search([("index", "=", True),]):

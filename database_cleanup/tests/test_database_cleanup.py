@@ -3,12 +3,13 @@
 from psycopg2 import ProgrammingError
 
 from odoo.modules.registry import Registry
-from odoo.tests.common import TransactionCase, tagged
+from odoo.tests.common import TransactionCase, at_install, post_install
 from odoo.tools import config, mute_logger
 
 
-# Use post_install to get all models loaded, more info: odoo/odoo#13458
-@tagged("post_install", "-at_install")
+# Use post_install to get all models loaded more info: odoo/odoo#13458
+@at_install(False)
+@post_install(True)
 class TestDatabaseCleanup(TransactionCase):
     def setUp(self):
         super(TestDatabaseCleanup, self).setUp()

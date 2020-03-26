@@ -14,7 +14,6 @@ class CleanupPurgeLineMenu(models.TransientModel):
     )
     menu_id = fields.Many2one("ir.ui.menu", "Menu entry")
 
-    @api.multi
     def purge(self):
         """Unlink menu entries upon manual confirmation."""
         if self:

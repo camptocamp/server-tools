@@ -3,10 +3,10 @@
 # pylint: disable=consider-merging-classes-inherited
 from odoo import api, fields, models
 
-REASON_DUPLICATE = 1
-REASON_DEFAULT = 2
-REASON_DEFAULT_FALSE = 3
-REASON_UNKNOWN_MODEL = 4
+REASON_DUPLICATE = "1"
+REASON_DEFAULT = "2"
+REASON_DEFAULT_FALSE = "3"
+REASON_UNKNOWN_MODEL = "4"
 
 
 class CleanupPurgeLineProperty(models.TransientModel):
@@ -27,7 +27,6 @@ class CleanupPurgeLineProperty(models.TransientModel):
         ]
     )
 
-    @api.multi
     def purge(self):
         """Delete properties"""
         self.write({"purged": True})

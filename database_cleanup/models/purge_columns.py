@@ -17,7 +17,6 @@ class CleanupPurgeLineColumn(models.TransientModel):
         "cleanup.purge.wizard.column", "Purge Wizard", readonly=True
     )
 
-    @api.multi
     def purge(self):
         """
         Unlink columns upon manual confirmation.
@@ -80,10 +79,10 @@ class CleanupPurgeWizardColumn(models.TransientModel):
         """
         columns = list(
             {
-                    column.name
-                    for model_pool in model_pools
-                    for column in model_pool._fields.values()
-                    if not (column.compute is not None and not column.store)
+                column.name
+                for model_pool in model_pools
+                for column in model_pool._fields.values()
+                if not (column.compute is not None and not column.store)
             }
         )
         columns += models.MAGIC_COLUMNS
