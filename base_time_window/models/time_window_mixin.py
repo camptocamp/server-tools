@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -22,9 +21,7 @@ class TimeWindowMixin(models.AbstractModel):
 
     start = fields.Float("From", required=True)
     end = fields.Float("To", required=True)
-    weekday_ids = fields.Many2many(
-        comodel_name="time.weekday", required=True
-    )
+    weekday_ids = fields.Many2many(comodel_name="time.weekday", required=True)
 
     @api.constrains("start", "end", "weekday_ids")
     def check_window_no_overlaps(self):
@@ -73,8 +70,7 @@ class TimeWindowMixin(models.AbstractModel):
             if res:
                 other = self.browse(res[0][0])
                 raise ValidationError(
-                    _("%s overlaps %s")
-                    % (record.display_name, other.display_name)
+                    _("%s overlaps %s") % (record.display_name, other.display_name)
                 )
 
     @api.depends("start", "end", "weekday_ids")

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -13,10 +12,10 @@ class TestPartnerTimeWindow(models.Model):
     _inherit = "time.window.mixin"
     _description = "Test partner time Window"
 
-    _overlap_check_field = 'partner_id'
+    _overlap_check_field = "partner_id"
 
     partner_id = fields.Many2one(
-        "res.partner", required=True, index=True, ondelete='cascade'
+        "res.partner", required=True, index=True, ondelete="cascade"
     )
 
     @api.constrains("partner_id")
@@ -36,9 +35,9 @@ class TestPartnerTimeWindow(models.Model):
     def float_to_time_repr(self, value):
         pattern = "%02d:%02d"
         hour = math.floor(value)
-        min = round((value % 1) * 60)
-        if min == 60:
-            min = 0
+        minute = round((value % 1) * 60)
+        if minute == 60:
+            minute = 0
             hour += 1
 
-        return pattern % (hour, min)
+        return pattern % (hour, minute)
