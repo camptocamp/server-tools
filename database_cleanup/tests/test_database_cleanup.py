@@ -169,10 +169,10 @@ class TestDatabaseCleanup(TransactionCase):
             if self.modules:
                 cr2.execute(
                     "DELETE FROM ir_module_module WHERE id in %s",
-                    (tuple(self.module.id),),
+                    (tuple(self.modules.ids),),
                 )
             if self.models:
                 cr2.execute(
-                    "DELETE FROM ir_model WHERE id in %s", (tuple(self.model.id),)
+                    "DELETE FROM ir_model WHERE id in %s", (tuple(self.models.ids),)
                 )
             cr2.commit()
