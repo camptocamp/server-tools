@@ -17,9 +17,12 @@ class TestDatabaseCleanup(TransactionCase):
         self.modules = self.env["ir.module.module"]
         self.models = self.env["ir.model"]
         # Create one property for tests
+        partner_name_field_id = self.env["ir.model.fields"].search(
+            [("name", "=", "name"), ("model_id.model", "=", "res.partner")], limit=1
+        )
         self.env["ir.property"].create(
             {
-                "fields_id": self.env.ref("base.field_res_partner__name").id,
+                "fields_id": partner_name_field_id.id,
                 "type": "char",
                 "value_text": "My default partner name",
             }
