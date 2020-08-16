@@ -5,12 +5,13 @@ from contextlib import contextmanager
 from psycopg2 import ProgrammingError
 
 from odoo.modules.registry import Registry
-from odoo.tests.common import TransactionCase, tagged
+from odoo.tests.common import TransactionCase, at_install, post_install
 from odoo.tools import config, mute_logger
 
 
 # Use post_install to get all models loaded, more info: odoo/odoo#13458
-@tagged("post_install", "-at_install")
+@at_install(False)
+@post_install(True)
 class TestDatabaseCleanup(TransactionCase):
     def setUp(self):
         super(TestDatabaseCleanup, self).setUp()
@@ -168,10 +169,10 @@ class TestDatabaseCleanup(TransactionCase):
             if self.modules:
                 cr2.execute(
                     "DELETE FROM ir_module_module WHERE id in %s",
-                    (tuple(self.modules.ids),),
+                    (tuple(self.module.id),),
                 )
             if self.models:
                 cr2.execute(
-                    "DELETE FROM ir_model WHERE id in %s", (tuple(self.models.ids),)
+                    "DELETE FROM ir_model WHERE id in %s", (tuple(self.model.id),)
                 )
             cr2.commit()
