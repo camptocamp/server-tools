@@ -81,6 +81,6 @@ class PurgeWizard(models.AbstractModel):
         # make sure the user trying this is actually supposed to do it
         if self.env.ref("base.group_erp_manager") not in self.env.user.groups_id:
             raise AccessDenied
-        return super(PurgeWizard, self).create(values)
+        return super().create(values)
 
     purge_line_ids = fields.One2many("cleanup.purge.line", "wizard_id")

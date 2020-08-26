@@ -94,6 +94,11 @@ class CleanupPurgeWizardModule(models.TransientModel):
             raise UserError(_("No modules found to purge"))
         return res
 
+    @api.model
+    def create(self, values):
+        # just call super to be sure it works
+        return super(CleanupPurgeWizardModule, self).create(values)
+
     purge_line_ids = fields.One2many(
         "cleanup.purge.line.module", "wizard_id", "Modules to purge"
     )
