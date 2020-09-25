@@ -77,6 +77,8 @@ class Base(models.AbstractModel):
         # TODO: we should get default by field (eg: char field -> "")
         if value is False and field_type != "boolean":
             value = None
+        elif field_type == "float":
+            value = self._fields[field_name].convert_to_column(value, self)
         elif field_type == "date":
             value = fields.Date.to_date(value).isoformat()
         elif field_type == "datetime":
