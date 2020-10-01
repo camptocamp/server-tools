@@ -143,6 +143,7 @@ class TestDatabaseCleanup(TransactionCase):
             {"name": "database_cleanup_test_uninstalled", "state": "uninstalled"}
         )
 
+        self.models.invalidate_cache()
         with keep_registry(), mute_logger("odoo.modules.graph", "odoo.modules.loading"):
             purge_modules = self.env["cleanup.purge.wizard.module"].create({})
             # this module should be purged already during default_get
