@@ -29,8 +29,8 @@ class CreateIndexesLine(models.TransientModel):
                 ),
             )
             tables.add(model._table)
-        for _table in tables:
-            self.env.cr.execute("analyze %s", (IdentifierAdapter(model._table),))
+        for table in tables:
+            self.env.cr.execute("analyze %s", (IdentifierAdapter(table),))
         self.write({"purged": True})
 
 

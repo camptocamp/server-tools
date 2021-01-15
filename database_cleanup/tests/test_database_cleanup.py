@@ -171,4 +171,4 @@ class TestDatabaseCleanup(TransactionCase):
                     "DELETE FROM ir_model WHERE id in %s", (tuple(self.models.ids),)
                 )
             cr2.commit()
-            super(TestDatabaseCleanup, self).tearDown()
+        super(TestDatabaseCleanup, self).tearDown()

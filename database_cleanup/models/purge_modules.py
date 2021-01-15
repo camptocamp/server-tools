@@ -27,7 +27,7 @@ class IrModelData(models.Model):
                     continue
             if this.model not in self.env:
                 this.unlink()
-        return super(IrModelData, self)._module_data_uninstall(modules_to_remove)
+        return super()._module_data_uninstall(modules_to_remove)
 
 
 class CleanupPurgeLineModule(models.TransientModel):
