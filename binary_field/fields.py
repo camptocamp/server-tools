@@ -120,7 +120,7 @@ class FileSystemStorage(Storage):
             'file_size': file_size,
             }
 
-    def update(self, binary_uid, value):
+    def update(self, binary_uid, value, container=None):
         _logger.debug('Delete binary model: %s, field: %s, uid: %s'
                       % (self.model_name, self.field_name, binary_uid))
         self._file_delete(self.cr, SUPERUSER_ID, binary_uid)
@@ -183,11 +183,12 @@ class BinaryField(fields.function):
         storage_obj = obj.pool['storage.configuration']
         for record in obj.browse(cr, uid, ids, context=context):
             storage = storage_obj.get_storage(cr, SUPERUSER_ID, field_name, record)
+            container = storage_obj._get_config(cr, SUPERUSER_ID, record._name, field_name).get('base_path')
             binary_uid = record['%s_uid' % field_name]
             if binary_uid:
-                res = storage.update(binary_uid, value)
+                res = storage.update(binary_uid, value, container=container)
             else:
-                res = storage.add(value)
+                res = storage.add(value, container=container)
             vals = self._prepare_binary_meta(
                 cr, uid, field_name, res, context=context)
             record.write(vals)
@@ -273,20 +274,10 @@ class ImageField(BinaryField):
 
     def _read_binary(self, storage, record, field_name, binary_uid,
                      context=None):
-        if not context.get('bin_size_%s' % field_name)\
-             and not context.get('bin_base64_%s' % field_name)\
-             and not context.get('bin_base64')\
-             and storage.external_storage_server:
-            #if context.get('bin_size'):
-                # To avoid useless call by default for the image
-                # We never return the bin size but the url
-                # SO I remove the key in order to avoid the 
-                # automatic conversion in the orm
-                #context.pop('bin_size')
+        if context.get('image_url'):
             return storage.get_url(binary_uid)
-        else:
-            return super(ImageField, self)._read_binary(
-                storage, record, field_name, binary_uid, context=context)
+        return super(ImageField, self)._read_binary(
+            storage, record, field_name, binary_uid, context=context)
 
     def _refresh_cache(self, obj, cr, uid, ids, field_name, context=None):
         """Refresh the cache of the small image
