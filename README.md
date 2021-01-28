@@ -24,6 +24,7 @@ addon | version | summary
 [base_jsonify](base_jsonify/) | 14.0.1.0.0 | Base module that provide the jsonify method on all models
 [base_sparse_field_list_support](base_sparse_field_list_support/) | 14.0.1.0.1 | add list support to convert_to_cache()
 [base_technical_user](base_technical_user/) | 14.0.1.0.0 | Add a technical user parameter on the company
+[database_cleanup](database_cleanup/) | 14.0.1.0.0 | Technical module that ease database cleanup for various objects
 [onchange_helper](onchange_helper/) | 14.0.1.0.0 | Technical module that ease execution of onchange in Python code
 [sql_request_abstract](sql_request_abstract/) | 14.0.1.0.0 | Abstract Model to manage SQL Requests
 
