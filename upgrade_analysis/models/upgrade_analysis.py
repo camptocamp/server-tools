@@ -1,6 +1,6 @@
 # Copyright 2011-2015 Therp BV <https://therp.nl>
 # Copyright 2016-2020 Opener B.V. <https://opener.am>
-# Copyright 2019 Eficent <https://eficent.com>
+# Copyright 2019 ForgeFlow <https://forgeflow.com>
 # Copyright 2020 GRAP <https://grap.coop>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # flake8: noqa: C901
@@ -19,9 +19,10 @@ from odoo.tools.convert import nodeattr2bool
 from odoo.tools.translate import _
 
 try:
-    from odoo.addons.openupgrade_scripts.apriori import renamed_modules
+    from odoo.addons.openupgrade_scripts.apriori import merged_modules, renamed_modules
 except ImportError:
     renamed_modules = {}
+    merged_modules = {}
 
 from .. import compare
 
@@ -73,7 +74,7 @@ class UpgradeAnalysis(models.Model):
     def _get_remote_model(self, connection, model):
         self.ensure_one()
         if model == "record":
-            if float(self.config_id.version) < 14:
+            if float(self.config_id.version) < 14.0:
                 return connection.env["openupgrade.record"]
             else:
                 return connection.env["upgrade.record"]
@@ -367,7 +368,7 @@ class UpgradeAnalysis(models.Model):
             if "name" in element.attrib:
                 query = "./{}[@name='{}']".format(element.tag, element.attrib["name"])
             else:
-                # query = "./%s" % element.tag
+                # query = "./{}".format(element.tag)
                 continue
             for existing in target.xpath(query):
                 target.remove(existing)
@@ -430,7 +431,7 @@ class UpgradeAnalysis(models.Model):
                 raise ValidationError(
                     _(
                         "Unexpected root Element: %s in file: %s"
-                        % (tree.getroot(), xml_file)
+                        % (root_node.getroot(), xml_file)
                     )
                 )
             for node in root_node:
@@ -459,15 +460,27 @@ class UpgradeAnalysis(models.Model):
         remote_record_obj = self._get_remote_model(connection, "record")
         local_record_obj = self.env["upgrade.record"]
         local_modules = local_record_obj.list_modules()
-        for remote_module in remote_record_obj.list_modules():
-            local_module = renamed_modules.get(remote_module, remote_module)
-            if local_module not in local_modules:
+        all_remote_modules = remote_record_obj.list_modules()
+        for local_module in local_modules:
+            remote_files = []
+            remote_modules = []
+            remote_update, remote_noupdate = {}, {}
+            for remote_module in all_remote_modules:
+                if local_module == renamed_modules.get(
+                    remote_module, merged_modules.get(remote_module, remote_module)
+                ):
+                    remote_files.extend(
+                        remote_record_obj.get_xml_records(remote_module)
+                    )
+                    remote_modules.append(remote_module)
+                    add_remote_update, add_remote_noupdate = self._parse_files(
+                        remote_files, remote_module
+                    )
+                    remote_update.update(add_remote_update)
+                    remote_noupdate.update(add_remote_noupdate)
+            if not remote_modules:
                 continue
-            remote_files = remote_record_obj.get_xml_records(remote_module)
             local_files = local_record_obj.get_xml_records(local_module)
-            remote_update, remote_noupdate = self._parse_files(
-                remote_files, remote_module
-            )
             local_update, local_noupdate = self._parse_files(local_files, local_module)
             diff = self._get_xml_diff(
                 remote_update, remote_noupdate, local_update, local_noupdate

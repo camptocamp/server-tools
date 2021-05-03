@@ -1,16 +1,19 @@
 # Copyright 2011-2015 Therp BV <https://therp.nl>
 # Copyright 2016-2020 Opener B.V. <https://opener.am>
-# Copyright 2019 Eficent <https://eficent.com>
+# Copyright 2019 ForgeFlow <https://forgeflow.com>
 # Copyright 2020 GRAP <https://grap.coop>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import ast
+import logging
 import os
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.modules.module import MANIFEST_NAMES, get_module_path
 from odoo.tools.translate import _
+
+_logger = logging.getLogger(__name__)
 
 
 class UpgradeRecord(models.Model):
@@ -102,7 +105,8 @@ class UpgradeRecord(models.Model):
             "req_default",
             "hasdefault",
             "table",
-            "inherits",
+            "_inherits",
+            "_order",
         ]
 
         template = {x: False for x in keys}
@@ -118,6 +122,17 @@ class UpgradeRecord(models.Model):
                 }
             )
             repre.update({x.name: x.value for x in record.attribute_ids})
+            if repre["table"]:
+                repre.update(
+                    {
+                        "column1": self.env[repre["model"]]
+                        ._fields[repre["field"]]
+                        .column1,
+                        "column2": self.env[repre["model"]]
+                        ._fields[repre["field"]]
+                        .column2,
+                    }
+                )
             data.append(repre)
         return data
 
@@ -155,6 +170,13 @@ class UpgradeRecord(models.Model):
                 if not xml_file.lower().endswith(".xml"):
                     continue
                 parts = xml_file.split("/")
-                with open(os.path.join(addon_dir, *parts), "r") as xml_handle:
-                    files.append(xml_handle.read())
+                try:
+                    with open(os.path.join(addon_dir, *parts), "r") as xml_handle:
+                        files.append(xml_handle.read())
+                except UnicodeDecodeError:
+                    _logger.warning(
+                        "Encoding error: Unable to read %s",
+                        os.path.join(addon_dir, *parts),
+                    )
+                    continue
         return files
