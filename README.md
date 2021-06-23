@@ -32,6 +32,7 @@ addon | version | summary
 [base_time_window](base_time_window/) | 14.0.1.0.0 | Base model to handle time windows
 [base_view_inheritance_extension](base_view_inheritance_extension/) | 14.0.1.0.1 | Adds more operators for view inheritance
 [letsencrypt](letsencrypt/) | 14.0.1.0.0 | Request SSL certificates from letsencrypt.org
+[database_cleanup](database_cleanup/) | 14.0.1.0.0 | Technical module that ease database cleanup for various objects
 [module_auto_update](module_auto_update/) | 14.0.1.0.1 | Automatically update Odoo modules
 [module_change_auto_install](module_change_auto_install/) | 14.0.1.0.2 | Customize auto installables modules by configuration
 [onchange_helper](onchange_helper/) | 14.0.1.0.0 | Technical module that ease execution of onchange in Python code
