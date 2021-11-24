@@ -126,3 +126,70 @@ class TestBaseViewInheritanceExtension(TransactionCase):
         )
         self.assertTrue("my_value" in field_node.attrib["context"])
         self.assertFalse("'cost_center_id'" in field_node.attrib["context"])
+
+    def test_python_dict_inheritance_attrs(self):
+        view_model = self.env["ir.ui.view"]
+        source = etree.fromstring(
+            """
+            <form>
+                <field
+                    name="ref"
+                    attrs="{'invisible': [('state', '=', 'draft')]}"
+                />
+            </form>
+            """
+        )
+        specs = etree.fromstring(
+            """
+            <field name="ref" position="attributes">
+                <attribute name="attrs" operation="python_dict" key="required">
+                    [('state', '!=', 'draft')]
+                </attribute>
+            </field>
+            """
+        )
+        modified_source = view_model.inheritance_handler_attributes_python_dict(
+            source, specs
+        )
+        field_node = modified_source.xpath('//field[@name="ref"]')[0]
+        self.assertTrue(
+            "'invisible': [('state', '=', 'draft')]" in field_node.attrib["attrs"]
+        )
+        self.assertTrue(
+            "'required': [('state', '!=', 'draft')]" in field_node.attrib["attrs"]
+        )
+
+    def test_python_dict_inheritance_attrs_replace(self):
+        view_model = self.env["ir.ui.view"]
+        source = etree.fromstring(
+            """
+            <form>
+                <field
+                    name="ref"
+                    attrs="{
+                        'invisible': [('state', '=', 'draft')],
+                        'required': [('state', '=', False)],
+                    }"
+                />
+            </form>
+            """
+        )
+        specs = etree.fromstring(
+            """
+            <field name="ref" position="attributes">
+                <attribute name="attrs" operation="python_dict" key="required">
+                    [('state', '!=', 'draft')]
+                </attribute>
+            </field>
+            """
+        )
+        modified_source = view_model.inheritance_handler_attributes_python_dict(
+            source, specs
+        )
+        field_node = modified_source.xpath('//field[@name="ref"]')[0]
+        self.assertTrue(
+            "'invisible': [('state', '=', 'draft')]" in field_node.attrib["attrs"]
+        )
+        self.assertTrue(
+            "'required': [('state', '!=', 'draft')]" in field_node.attrib["attrs"]
+        )
