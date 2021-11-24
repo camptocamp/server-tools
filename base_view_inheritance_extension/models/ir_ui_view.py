@@ -1,8 +1,10 @@
 # Copyright 2016 Therp BV <https://therp.nl>
 # Copyright 2018 Tecnativa - Sergio Teruel
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
+import ast
+
+import astor
 from lxml import etree
-from yaml import safe_load
 
 from odoo import api, models, tools
 
@@ -79,24 +81,6 @@ class IrUiView(models.Model):
             )
         return handler
 
-    def _is_variable(self, value):
-        return not ("'" in value or '"' in value) and True or False
-
-    def _list_variables(self, str_dict):
-        """
-        Store non literal dictionary values into a list to post-process
-        operations.
-        """
-        variables = []
-        items = str_dict.replace("{", "").replace("}", "").split(",")
-        for item in items:
-            key_value = item.split(":")
-            if len(key_value) == 2:
-                value = key_value[1]
-                if self._is_variable(value):
-                    variables.append(value.strip())
-        return variables
-
     @api.model
     def inheritance_handler_attributes_python_dict(self, source, specs):
         """Implement
@@ -108,14 +92,31 @@ class IrUiView(models.Model):
         node = self.locate_node(source, specs)
         for attribute_node in specs:
             str_dict = node.get(attribute_node.get("name")) or "{}"
-            variables = self._list_variables(str_dict)
-            if self._is_variable(attribute_node.text):
-                variables.append(attribute_node.text)
-            my_dict = safe_load(str_dict)
-            my_dict[attribute_node.get("key")] = attribute_node.text
-            for k, v in my_dict.items():
-                my_dict[k] = UnquoteObject(v) if v in variables else v
-            node.attrib[attribute_node.get("name")] = str(my_dict)
+            tree = ast.parse(str_dict)
+            # Some checks to ensure ast is really a python expr with a dict
+            assert len(tree.body) == 1 and isinstance(tree.body[0], ast.Expr)
+            assert isinstance(tree.body[0].value, ast.Dict)
+            ast_dict = tree.body[0].value
+            # Find the ast dict key
+            key_id = next(
+                (
+                    i
+                    for i, k in enumerate(ast_dict.keys)
+                    if isinstance(k, ast.Str) and k.s == attribute_node.get("key")
+                ),
+                None,
+            )
+            # Update or create the key
+            new_value = ast.parse(attribute_node.text.strip()).body[0].value
+            if key_id:
+                ast_dict.values[key_id] = new_value
+            else:
+                ast_dict.keys.append(ast.Str(attribute_node.get("key")))
+                ast_dict.values.append(new_value)
+            # Dump the ast back to source
+            node.attrib[attribute_node.get("name")] = astor.to_source(
+                tree, pretty_source=lambda s: "".join(s).strip()
+            )
         return source
 
     @api.model
