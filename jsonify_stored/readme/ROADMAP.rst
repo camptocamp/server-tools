@@ -1,0 +1,5 @@
+- Add tests!!!
+- Fix to TODOs
+- Make the jsonified_data field recomputed when:
+  - any of the exported field is modified
+  - the related export is changed (exported fields definition)
