@@ -15,4 +15,5 @@
     "depends": ["base_jsonify", "base_sparse_field", "queue_job"],
     "data": ["data/ir_cron.xml", "data/queue_job.xml"],
     "demo": ["demo/tests.xml"],
+    "post_init_hook": "post_init_hook",
 }
