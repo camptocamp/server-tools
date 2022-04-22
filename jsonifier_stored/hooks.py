@@ -7,7 +7,7 @@
 # which might be slow.
 
 
-def add_jsonify_column(cr, table_name):
+def add_jsonifier_column(cr, table_name):
     query = f"""
         ALTER TABLE {table_name} ADD COLUMN IF NOT EXISTS jsonified_data TEXT;
     """
