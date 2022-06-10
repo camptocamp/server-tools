@@ -11,3 +11,4 @@ odoorpc
 openupgradelib
 pysftp
 sentry_sdk
+pygount
