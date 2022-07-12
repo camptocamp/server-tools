@@ -1,4 +1,4 @@
-# Copyright 2019 Camptocamp SA
+# Copyright 2022 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 from odoo import fields, models
@@ -8,17 +8,13 @@ from odoo.tools.safe_eval import safe_eval
 class AbstractConditionalImage(models.AbstractModel):
     _name = "abstract.conditional.image"
     _description = "Abstract image"
+    _inherit = "image.mixin"
 
-    image = fields.Binary(compute="_compute_image", store=False, readonly=True)
-    image_medium = fields.Binary(
-        compute="_compute_image",
-        string="Medium-sized image",
-        store=False,
-        readonly=True,
-    )
-    image_small = fields.Binary(
-        compute="_compute_image", string="Small-sized image", store=False, readonly=True
-    )
+    image_1920 = fields.Image(compute="_compute_images", store=False, readonly=True)
+    image_1024 = fields.Image(compute="_compute_images", store=False, readonly=True)
+    image_512 = fields.Image(compute="_compute_images", store=False, readonly=True)
+    image_256 = fields.Image(compute="_compute_images", store=False, readonly=True)
+    image_128 = fields.Image(compute="_compute_images", store=False, readonly=True)
 
     @staticmethod
     def _compute_selector_test_without_company(image_selector, record):
@@ -36,7 +32,7 @@ class AbstractConditionalImage(models.AbstractModel):
             )
         return False
 
-    def _compute_image(self):
+    def _compute_images(self):
         if "company_id" in self._fields:
             search_clause = [("model_name", "=", self._name)]
             test_method = self._compute_selector_test_with_company
@@ -59,11 +55,13 @@ class AbstractConditionalImage(models.AbstractModel):
                 if test_method(image_selector, rec):
                     found = image_selector
                     break
-
-            rec.update(
-                {
-                    "image": found and found.image,
-                    "image_medium": found and found.image_medium,
-                    "image_small": found and found.image_small,
-                }
-            )
+            if found:
+                rec.update(
+                    {
+                        "image_1920": found.image_1920,
+                        "image_1024": found.image_1024,
+                        "image_512": found.image_512,
+                        "image_256": found.image_256,
+                        "image_128": found.image_128,
+                    }
+                )
