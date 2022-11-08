@@ -9,5 +9,6 @@ lxml
 mako
 odoorpc
 openupgradelib
+pygount
 pysftp
 sentry_sdk
