@@ -31,9 +31,14 @@ class Base(models.AbstractModel):
         :return: changed values
         """
         # _onchange_spec() will return onchange fields from the default view
-        # we need all fields in the dict even the empty ones
-        # otherwise 'onchange()' will not apply changes to them
-        onchange_specs = {field_name: "1" for field_name, field in self._fields.items()}
+        # we need all fields that trigger onchanges in the dict
+        onchange_specs = {
+            field_name: "1"
+            for field_name, field in self._fields.items()
+            if field_name
+            in self._onchange_methods  # computes only fields with onchanges
+            # if self._has_onchange(field, self._fields.values())  # computed fields too
+        }
         all_values = values.copy()
         # If self is a record (play onchange on existing record)
         # we take the value of the field
@@ -58,16 +63,8 @@ class Base(models.AbstractModel):
             field for field in onchange_fields if field in self._onchange_methods
         ]:
             onchange_values = self.onchange(all_values, field, onchange_specs)
-            new_values.update(self._get_new_values(values, onchange_values))
+            new_field_values = self._get_new_values(values, onchange_values)
+            new_values.update(new_field_values)
             all_values.update(new_values)
 
-        return {
-            f: v
-            for f, v in all_values.items()
-            if not (
-                self._fields[f].compute
-                and not self._fields[f].inverse
-                and self._fields[f].readonly
-            )
-            and (f in values or f in new_values or f in onchange_fields)
-        }
+        return new_values

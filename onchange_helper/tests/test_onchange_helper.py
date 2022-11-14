@@ -13,7 +13,6 @@ class TestOnchangeHelper(TransactionCase):
         self.assertIn("state_id", updated_vals)
         self.assertIn("street", updated_vals)
         self.assertIn("zip", updated_vals)
-
         self.assertEqual(updated_vals["country_id"], main_partner.country_id.id)
         self.assertEqual(updated_vals["state_id"], main_partner.state_id.id)
         self.assertEqual(updated_vals["street"], main_partner.street)
