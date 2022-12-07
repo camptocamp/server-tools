@@ -13,6 +13,7 @@
     ],
     "website": "https://github.com/OCA/server-tools",
     "data": [
+        "data/ir_cron.xml",
         "views/image_view.xml",
         "security/ir.model.access.csv",
     ],
