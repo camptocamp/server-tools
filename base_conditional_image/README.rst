@@ -23,7 +23,7 @@ Conditional Images
     :target: https://runbot.odoo-community.org/runbot/149/14.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module extends the functionality of any model to support conditional images
 (based on the record attributes) and to manage them either globally or by company.
@@ -61,13 +61,10 @@ scheduled actions to regenerate the different sizes of the image.
 Usage
 =====
 
-Go to *Technical Settings > Settings > Images* to configure all the images.
+Go to *Technical Settings > Settings > Conditional Images* to configure all the images.
 You can define images for specific objects, depending on the attributes and the company of the object.
 
 The `selector` should return a boolean expression. All fields of the object are available to compute the result.
-
-The system will first try to match an image with a company set up, then with the ones without a company.
-If your object does not have a `company_id` field, this check will be ignored and only images without a company will be used.
 
 Bug Tracker
 ===========
@@ -94,6 +91,7 @@ Contributors
     * Patrick Tombez <patrick.tombez@camptocamp.com>
     * Denis Leemann <denis.leemann@camptocamp.com>
     * Akim Juillerat <akim.juillerat@camptocamp.com>
+    * Stéphane Mangin <stephane.mangin@camptocamp.com>
 * `Trobz <https://trobz.com>`_:
     * Son Ho <sonhd@trobz.com>
 
