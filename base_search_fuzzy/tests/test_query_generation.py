@@ -19,8 +19,8 @@ class QueryGenerationCase(TransactionCase):
         self.assertIn("%", expression.TERM_OPERATORS)
 
         # create new query with fuzzy search operator
-        query = self.ResPartner._where_calc([("name", "%", "test")], active_test=False)
-        from_clause, where_clause, where_clause_params = query.get_sql()
+        query = self.ResPartner._where_calc([("name", "%", "test")], active_test=False, with_cte=True)
+        cte_clause, from_clause, where_clause, where_clause_params = query.get_sql()
 
         # the % parameter has to be escaped (%%) for the string replation
         self.assertEqual(where_clause, """("res_partner"."name" %% %s)""")
@@ -42,9 +42,9 @@ class QueryGenerationCase(TransactionCase):
 
         # create new query with fuzzy search operator
         query = self.ResPartnerCategory.with_context(ctx)._where_calc(
-            [("name", "%", "Goschaeftlic")], active_test=False
+            [("name", "%", "Goschaeftlic")], active_test=False, with_cte=True
         )
-        from_clause, where_clause, where_clause_params = query.get_sql()
+        cte_clause, from_clause, where_clause, where_clause_params = query.get_sql()
 
         # the % parameter has to be escaped (%%) for the string replation
         self.assertIn(
