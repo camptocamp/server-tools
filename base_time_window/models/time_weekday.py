@@ -60,3 +60,20 @@ class TimeWeekday(models.Model):
         result = super().unlink()
         self._get_id_by_name.clear_cache(self)
         return result
+
+    def _get_next_weekday_date(self, date_from=False, include_date_from=True):
+        """Returns the next Date matching weekday
+
+        :param date_from: Date object from which we start searching for next weekday
+        :param include_date_from: Allows to return date from if it's same weekday
+        :return Date object matching the weekday
+        """
+        self.ensure_one()
+        if not date_from:
+            date_from = fields.Date.today()
+        next_date = date_from
+        if next_date.weekday() == int(self.name) and not include_date_from:
+            next_date = fields.Date.add(next_date, days=1)
+        while next_date.weekday() != int(self.name):
+            next_date = fields.Date.add(next_date, days=1)
+        return next_date
