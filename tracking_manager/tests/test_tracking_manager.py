@@ -134,16 +134,31 @@ class TestTrackingManager(SavepointCase):
         self.assertEqual(tracking.new_value_text, "BAR; TOOH")
 
     def test_o2m_create_indirectly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
+
         self.partner.write({"bank_ids": [(0, 0, {"acc_number": "1234567890"})]})
         self.assertEqual(len(self.messages), 1)
         self.assertEqual(self.messages.body.count("New"), 1)
 
     def test_o2m_unlink_indirectly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
+
         self.partner.write({"bank_ids": [(2, self.partner.bank_ids[0].id)]})
         self.assertEqual(len(self.messages), 1)
         self.assertIn("Delete", self.messages.body)
 
     def test_o2m_write_indirectly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
+
         self.partner.write(
             {
                 "bank_ids": [(1, self.partner.bank_ids[0].id, {"acc_number": "123"})],
@@ -166,6 +181,11 @@ class TestTrackingManager(SavepointCase):
         self.assertEqual(len(self.messages), 0)
 
     def test_o2m_create_and_unlink_indirectly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
+
         self.partner.write(
             {
                 "bank_ids": [
@@ -179,6 +199,11 @@ class TestTrackingManager(SavepointCase):
         self.assertEqual(self.messages.body.count("Delete"), 1)
 
     def test_o2m_update_m2m_indirectly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
+
         self.partner.write(
             {
                 "bank_ids": [
@@ -202,6 +227,11 @@ class TestTrackingManager(SavepointCase):
         self.assertEqual(self.messages.body.count("Changed"), 1)
 
     def test_o2m_update_m2o_indirectly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
+
         self.partner.write(
             {
                 "bank_ids": [
@@ -225,6 +255,11 @@ class TestTrackingManager(SavepointCase):
         # So we are in a case that we do some change and them we delete them
         # in that case we should only have one message of deletation
         # and no error
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
+
         self.partner.write(
             {
                 "bank_ids": [(1, self.partner.bank_ids[0].id, {"acc_number": "123"})],
@@ -240,6 +275,11 @@ class TestTrackingManager(SavepointCase):
         self.assertEqual(self.messages.body.count("Delete"), 1)
 
     def test_o2m_create_directly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
+
         self.env["res.partner.bank"].create(
             {
                 "acc_number": "1234567890",
@@ -250,16 +290,28 @@ class TestTrackingManager(SavepointCase):
         self.assertEqual(self.messages.body.count("New"), 1)
 
     def test_o2m_unlink_directly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
         self.partner.bank_ids.unlink()
         self.assertEqual(len(self.messages), 1)
         self.assertEqual(self.messages.body.count("Delete"), 1)
 
     def test_o2m_update_directly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
         self.partner.bank_ids.write({"acc_number": "0987654321"})
         self.assertEqual(len(self.messages), 1)
         self.assertEqual(self.messages.body.count("Change :"), 1)
 
     def test_o2m_write_and_unlink_directly(self):
+        bank_ids_field = self.partner_model.field_id.filtered(
+            lambda x: x.name == "bank_ids"
+        )
+        bank_ids_field.custom_tracking = True
         # see explanation of test_o2m_write_and_unlink_indirectly
         self.partner.bank_ids.write({"acc_number": "0987654321"})
         self.partner.bank_ids.unlink()
