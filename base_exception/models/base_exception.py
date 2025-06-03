@@ -117,4 +117,11 @@ class BaseExceptionModel(models.AbstractModel):
         exception_ids = self.detect_exceptions()
         if exception_ids and self.env.context.get("raise_exception", True):
             exceptions = self.env["exception.rule"].browse(exception_ids)
-            raise ValidationError("\n".join(exceptions.mapped("name")))
+            # Allow displaying the exceptions' descriptions using an optional sys param
+            # (for retrocompatibility)
+            param_sudo = self.env["ir.config_parameter"].sudo()
+            if param_sudo.get_param("base_exception.display_exception_description"):
+                msg_list = [f"{e.name}: {e.description}" for e in exceptions]
+            else:
+                msg_list = exceptions.mapped("name")
+            raise ValidationError("\n".join(msg_list))
