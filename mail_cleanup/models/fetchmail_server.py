@@ -109,7 +109,7 @@ class FetchmailServer(models.Model):
             failed,
         )
 
-    def fetch_mail(self):
+    def fetch_mail(self, raise_exception=True):
         # Called before the fetch, in order to clean up right before
         # retrieving emails.
         for server in self:
