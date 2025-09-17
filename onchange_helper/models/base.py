@@ -42,7 +42,7 @@ class Base(models.AbstractModel):
             self.ensure_one()
             record_values = self._convert_to_write(
                 {
-                    field_name: self[field_name]
+                    field_name: self.sudo()[field_name]  # use sudo to avoid access right issue
                     for field_name, field in self._fields.items()
                 }
             )
